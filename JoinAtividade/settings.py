@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'empresa',
 ]
 
 MIDDLEWARE = [
@@ -89,8 +90,8 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_DB', 'joinatividade_db'),
         'USER': os.environ.get('POSTGRES_USER', 'admin'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'adminadmin'),
-        'HOST': 'db',
-        'PORT': '5432',
+        'HOST': 'localhost',
+        'PORT': '5433',
     }
 }
 
