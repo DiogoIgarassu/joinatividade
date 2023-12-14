@@ -17,9 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from empresa.views import hide_box_view, conteudo_view
+from geomaps.views import mapa_view, excluir_alvo
 
 urlpatterns = [
     path('hide-box/', hide_box_view, name='hide-box'),
     path('conteudo/', conteudo_view, name='conteudo'),
+    path('', mapa_view, name='mapa'),
+    path('excluir-alvo/<int:alvo_id>/', excluir_alvo, name='excluir_alvo'),
     path('admin/', admin.site.urls),
 ]

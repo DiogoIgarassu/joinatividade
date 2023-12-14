@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapa de Alvos - Curitiba</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <style>
+        #mapid { height: 400px; }
+        .bg-light-blue { background-color: #add8e6; }
+        .sidebar {
+            height: 100vh;
+            background-color: #add8e6;
+            padding: 20px;
+            position: fixed;
+        }
+        .content {
+            margin-left: 220px; /* Ajustado para a largura da sidebar */
+            padding: 20px;
+        }
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .content { margin-left: 0; }
+        }
+        .btn {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light-blue">
+        <a class="navbar-brand" href="#">Mapa de Alvos</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+
+    <div class="sidebar d-none d-md-block">
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Recursos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Preços</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="card">
+            <div class="card-body">
+                <div id="mapid"></div>
+                <button type="button" id="btnIncluirAlvo" class="btn btn-primary mt-3" data-toggle="modal" data-target="#alvoModal">
+                    Incluir Alvo
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal para Incluir Novo Alvo -->
+    <div class="modal fade" id="alvoModal" tabindex="-1" role="dialog" aria-labelledby="alvoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alvoModalLabel">Incluir Novo Alvo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <input type="hidden" id="alvoId">
+
+                        <!-- Campo Nome do Alvo -->
+                        <div class="form-group">
+                            <label for="alvoNome">Nome do Alvo</label>
+                            <input type="text" class="form-control" id="alvoNome" name="nome" required>
+                        </div>
+
+                        <!-- Campo Latitude -->
+                        <div class="form-group">
+                            <label for="alvoLatitude">Latitude</label>
+                            <input type="number" class="form-control" id="alvoLatitude" name="latitude" required step="any" min="-90" max="90">
+                        </div>
+
+
+                        <!-- Campo Longitude -->
+                        <div class="form-group">
+                            <label for="alvoLongitude">Longitude</label>
+                            <input type="number" class="form-control" id="alvoLongitude" name="longitude" required step="any" min="-90" max="90">
+                        </div>
+
+                        <!-- Campo Data de Expiração -->
+                        <div class="form-group">
+                            <label for="alvoDataExpiracao">Data de Expiração</label>
+                            <input type="date" class="form-control" id="alvoDataExpiracao" name="data_expiracao" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" id="btnExcluirAlvo" class="btn btn-danger" onclick="excluirAlvo()" style="display: none;">Excluir</button>
+                        <input type="submit" class="btn btn-primary" value="Gravar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS e Bootstrap JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        var mymap = L.map('mapid').setView([-25.4284, -49.2733], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mymap);
+        var alvosData = JSON.parse('{{ alvos|safe }}');
+        var marcadores = {}; // Declare isso fora do loop forEach
+
+        alvosData.forEach(function(alvo) {
+            var alvoObj = alvo.fields;
+            var marker = L.marker([alvoObj.latitude, alvoObj.longitude]).addTo(mymap)
+                          .bindPopup(alvoObj.nome);
+
+            // Armazenar dados do alvo no marcador
+            marker.alvoData = {...alvoObj, id: alvo.pk};
+
+            // Armazenar o marcador no objeto marcadores
+            marcadores[alvo.pk] = marker;
+
+            // Evento de clique do marcador
+            marker.on('click', function() {
+                preencherModalComDadosDoAlvo(this.alvoData, true);
+                $('#alvoModal').modal('show');
+            });
+        });
+
+        function preencherModalComDadosDoAlvo(alvoData, mostrarBotaoExcluir) {
+            document.getElementById('alvoNome').value = alvoData.nome;
+            document.getElementById('alvoLatitude').value = alvoData.latitude;
+            document.getElementById('alvoLongitude').value = alvoData.longitude;
+            document.getElementById('alvoId').value = alvoData.id;
+            var dataExpiracao = new Date(alvoData.data_expiracao);
+            var dataFormatada = dataExpiracao.toISOString().split('T')[0];
+            document.getElementById('alvoDataExpiracao').value = dataFormatada;
+
+            if (mostrarBotaoExcluir) {
+                document.getElementById('btnExcluirAlvo').style.display = 'block';
+            } else {
+                document.getElementById('btnExcluirAlvo').style.display = 'none';
+            }
+        }
+
+        function excluirAlvo() {
+            var alvoId = document.getElementById('alvoId').value;
+            if (!alvoId) {
+                console.error('ID do alvo não encontrado.');
+                return;
+            }
+
+            $.ajax({
+                url: '/excluir-alvo/' + alvoId + '/',
+                method: 'POST',
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.status == 'success') {
+                        // Alvo excluído com sucesso
+                        console.log(response.message);
+                        $('#alvoModal').modal('hide');
+
+                        // Remover o marcador do mapa
+                        if (marcadores[alvoId]) {
+                            mymap.removeLayer(marcadores[alvoId]);
+                            delete marcadores[alvoId]; // Remover a referência do objeto
+                        }
+                    } else {
+                        // Erro ao excluir alvo
+                        console.log(response.message);
+                    }
+                },
+                error: function(error) {
+                    console.log('Erro:', error);
+                }
+            });
+        }
+
+        document.getElementById('btnIncluirAlvo').addEventListener('click', function() {
+            limparFormularioAlvo();
+            $('#alvoModal').modal('show');
+        });
+
+        function limparFormularioAlvo() {
+            document.getElementById('alvoNome').value = '';
+            document.getElementById('alvoLatitude').value = '';
+            document.getElementById('alvoLongitude').value = '';
+            document.getElementById('alvoDataExpiracao').value = '';
+            document.getElementById('alvoId').value = ''; // Limpar também o campo oculto do ID
+            document.getElementById('btnExcluirAlvo').style.display = 'none'; // Esconder o botão excluir
+        }
+
+    </script>
+
+</body>
+</html>
