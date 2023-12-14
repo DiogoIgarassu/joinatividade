@@ -14,10 +14,10 @@ Descrição do seu projeto aqui.
 1. **Clonar o Repositório**
    ```bash
    git clone https://github.com/DiogoIgarassu/joinatividade.git
-   cd joinatividade```
+   cd joinatividade
 
 Construir e Executar com Docker Compose
-```docker-compose up --build```
+```docker-compose up --build
 
 Este comando constrói a imagem Docker do projeto (se ainda não foi construída) e inicia os containers definidos no docker-compose.yml.
 Executando Migrações do Django
