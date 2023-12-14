@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hide Box</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".btn").click(function() {
+                $("#box").toggle();
+                updateButtonText();
+            });
+
+            function updateButtonText() {
+                if ($("#box").is(":visible")) {
+                    $(".btn").text("Esconder Box");
+                } else {
+                    $(".btn").text("Exibir Box");
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+
+<div id="box" style="width:100px; height:100px; background-color:blue;"></div>
+<button class="btn">Esconder Box</button>
+
+</body>
+</html>

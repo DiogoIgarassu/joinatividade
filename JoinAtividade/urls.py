@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from empresa.views import hide_box_view, conteudo_view
 
 urlpatterns = [
+    path('hide-box/', hide_box_view, name='hide-box'),
+    path('conteudo/', conteudo_view, name='conteudo'),
     path('admin/', admin.site.urls),
 ]

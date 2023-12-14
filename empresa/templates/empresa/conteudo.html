@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conteúdo</title>
+   <style type="text/css">
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .tudo {
+            width: 95%;
+            display: table;
+            clear: both;
+            border: 1px solid black;
+            height: 95%;
+            margin: 10px;
+        }
+        .menu, .conteudo {
+            background-color: lightblue;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .menu {
+            float: left;
+            width: 30%;
+            margin: 10px 0 10px 10px;
+            height: 70%;
+        }
+        .conteudo {
+            float: left;
+            margin: 10px 10px 10px 35px;
+            width: calc(70% - 55px);
+            height: 90%;
+        }
+    </style>
+</head>
+<body>
+    <div class="tudo">
+        <div class="menu">Menu</div>
+        <div class="conteudo">Conteúdo</div>
+    </div>
+</body>
+</html>
