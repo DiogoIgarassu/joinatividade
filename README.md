@@ -30,14 +30,14 @@ Este comando constrói a imagem Docker do projeto (se ainda não foi construída
 Para aplicar as migrações do Django, abra um novo terminal e execute:
 
 ```bash
-docker-compose exec web python manage.py makemigrations
-docker-compose exec web python manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 ```
 **Carregar Dados**
 - Para carregar os dados iniciais no banco de dados, execute:
 
 ```bash
-docker-compose exec web python manage.py carregar_dados
+python manage.py carregar_dados
 ```
 
 web é o nome do serviço do seu aplicativo Django no docker-compose.yml.
@@ -58,10 +58,10 @@ Administração do PostgreSQL (se aplicável): http://localhost:9090 (ou a porta
 * **Exercícios 1-4:** Para visualizar as respostas dos exercícios do 1 ao 4, execute os seguintes comandos:
 
 ```bash
-docker-compose exec web python manage.py exercicio_1
-docker-compose exec web python manage.py exercicio_2
-docker-compose exec web python manage.py exercicio_3
-docker-compose exec web python manage.py exercicio_4
+python manage.py exercicio_1
+python manage.py exercicio_2
+python manage.py exercicio_3
+python manage.py exercicio_4
 ```
 
 * **Exercício 7:** Para visualizar o resultado do exercício 7, abra o navegador em http://localhost:8000/hide-box/.
