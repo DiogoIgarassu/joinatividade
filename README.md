@@ -1,41 +1,6 @@
 # JoinAtividade
 
-Descrição do seu projeto aqui.
-
-## Pré-requisitos
-
-- **Docker**
-- **Docker Compose**
-
-## Configuração e Execução
-
-### Configurando o Ambiente
-
-1. **Clonar o Repositório**
-   ```bash
-   git clone https://github.com/DiogoIgarassu/joinatividade.git
-   cd joinatividade
-```
-Construir e Executar com Docker Compose
-```bash
-   docker-compose up --build
-```
-Este comando constrói a imagem Docker do projeto (se ainda não foi construída) e inicia os containers definidos no docker-compose.yml.
-Executando Migrações do Django
-Para aplicar as migrações do Django, abra um novo terminal e execute:
-
-```docker-compose exec web python manage.py makemigrations
-docker-compose exec web python manage.py migrate
-```
-
-
-Certamente! Aqui está o texto formatado com as tags de Markdown apropriadas para o arquivo README.md do seu projeto Django "JoinAtividade". Você pode copiar este texto diretamente para o seu README.md:
-
-markdown
-Copy code
-# JoinAtividade
-
-Descrição do seu projeto aqui.
+Projeto destinado a testar habilidades em python, prostgreSQL e Javascript pela empresa Join Tecnologia
 
 ## Pré-requisitos
 
@@ -69,7 +34,7 @@ docker-compose exec web python manage.py makemigrations
 docker-compose exec web python manage.py migrate
 ```
 **Carregar Dados**
-Para carregar os dados iniciais no banco de dados, execute:
+- Para carregar os dados iniciais no banco de dados, execute:
 
 ```bash
 docker-compose exec web python manage.py carregar_dados
@@ -84,9 +49,9 @@ Aplicativo Django: http://localhost:8000
 Administração do PostgreSQL (se aplicável): http://localhost:9090 (ou a porta configurada para o PgAdmin no docker-compose.yml)
 
 **Comandos Úteis**
-Parar os Containers: docker-compose down
-Visualizar Logs: docker-compose logs
-Acessar o Shell do Django: docker-compose exec web python manage.py shell
+- Parar os Containers: docker-compose down
+- Visualizar Logs: docker-compose logs
+- Acessar o Shell do Django: docker-compose exec web python manage.py shell
 
 ### Visualizando os Resultados dos Exercícios
 
