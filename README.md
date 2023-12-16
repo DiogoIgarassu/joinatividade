@@ -4,8 +4,10 @@ Projeto destinado a testar habilidades em python, prostgreSQL e Javascript pela 
 
 ## Pré-requisitos
 
+- **Python 3.8 ou superior**
+- **Git**
 - **Docker**
-- **Docker Compose**
+- **Pycharm ou outra IDE**
 
 ## Configuração e Execução
 
@@ -22,17 +24,25 @@ Projeto destinado a testar habilidades em python, prostgreSQL e Javascript pela 
 ```bash
 docker-compose up --build
 ```
-
 Este comando constrói a imagem Docker do projeto (se ainda não foi construída) e inicia os containers definidos no docker-compose.yml.
 
-3. **Executando Migrações do Django**
+3. **Instalando as dependências**
+
+Para instalar as dependências, abra um novo terminal e execute:
+
+```bash
+cd joinatividade
+pip install -r requirements.txt
+```
+
+4. **Executando Migrações do Django**
 
 Para aplicar as migrações do Django, abra um novo terminal e execute:
 
 ```bash
-python manage.py makemigrations
 python manage.py migrate
 ```
+
 **Carregar Dados**
 - Para carregar os dados iniciais no banco de dados, execute:
 
@@ -40,18 +50,15 @@ python manage.py migrate
 python manage.py carregar_dados
 ```
 
-web é o nome do serviço do seu aplicativo Django no docker-compose.yml.
-
-4. **Acesso**
+5. **Acesso**
 Após iniciar os containers, o aplicativo estará disponível em:
 
 Aplicativo Django: http://localhost:8000
-Administração do PostgreSQL (se aplicável): http://localhost:9090 (ou a porta configurada para o PgAdmin no docker-compose.yml)
 
 **Comandos Úteis**
 - Parar os Containers: docker-compose down
 - Visualizar Logs: docker-compose logs
-- Acessar o Shell do Django: docker-compose exec web python manage.py shell
+- Acessar o Shell do Django: python manage.py shell
 
 ### Visualizando os Resultados dos Exercícios
 
